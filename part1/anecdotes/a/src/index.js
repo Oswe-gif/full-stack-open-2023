@@ -36,6 +36,7 @@ const App = (props) => {
       <Button anecdote={randomAnecdote} text={"Next anecdote"}/>
       <h1>Anecdote with most votes</h1>
       <p>{props.anecdotes[vote.indexOf(Math.max(...vote))]}</p>
+      <p>Has {Math.max(...vote)} votes</p>
     </>
   )
 }
