@@ -16,7 +16,7 @@ const App = (props) => {
   const [vote, setVote] = useState([0,0,0,0,0,0]);
   const randomAnecdote = ()=>
   {
-    let randomValue = Math.floor(Math.random() * (anecdotes.length-1));
+    let randomValue = Math.floor(Math.random() * (anecdotes.length));
     setSelected(randomValue);
   }
   const voteAnecdote = ()=>
