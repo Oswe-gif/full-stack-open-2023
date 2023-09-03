@@ -10,7 +10,6 @@ const Button =({anecdote, text})=>{
   )
 }
 
-
 const App = (props) => {
   const [selected, setSelected] = useState(0);
   const [vote, setVote] = useState([0,0,0,0,0,0]);
@@ -49,9 +48,6 @@ const anecdotes = [
   'Premature optimization is the root of all evil.',
   'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
 ]
-
-
-
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
