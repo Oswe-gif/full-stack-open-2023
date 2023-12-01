@@ -36,7 +36,7 @@ const App = () => {
 
     }
     else{
-      //alert(`${newName} is already added to phonebook`)
+      //alert(`${newName} is already added to phonebook` );
       personService.create(dataPerson).then(dataObject => setPersons(persons.concat(dataObject)));
       setNewName('');
       setNewNumber('');
