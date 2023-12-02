@@ -12,6 +12,6 @@ const update = updatedObject =>{
     return axios.put(`${baseURL}/${updatedObject.id}`,updatedObject).then(response=>response.data);
 }
 const deleteUser = id =>{
-    return axios.delete(`${baseURL}/${id}`).catch(error =>{alert(`The user with id ${id} does not exist`)});
+    return axios.delete(`${baseURL}/${id}`);
 }
 export default {getAll, create,update, deleteUser}

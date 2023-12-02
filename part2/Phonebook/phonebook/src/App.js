@@ -3,13 +3,14 @@ import Person from './components/Person';
 import PersonForm from './components/PersonForm';
 import Filter from './components/Filter';
 import personService from './services/personService';
+import Notification from './components/Notification';
 
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
   const [ filter, setFilter ] = useState('');
-
+  const [message, setMessage]=useState([null, null]);
   useEffect(()=>{
     personService.getAll().then(dataObject => setPersons(persons.concat(dataObject)));
   }, [])
@@ -28,8 +29,13 @@ const App = () => {
     if(user !== undefined){
       const textWindow = `${dataPerson.name} is already added to phonebook, replace the old number with new one?`;
       if (window.confirm(textWindow)){
-        const changedUser = { ...user, name:dataPerson.name, number: dataPerson.number  }
-        personService.update(changedUser).then(updatedObject => setPersons(persons.map(person => person.id === updatedObject.id ? updatedObject : person)));
+        const changedUser = { ...user, number: dataPerson.number  }
+        personService.update(changedUser)
+        .then(updatedObject => setPersons(persons.map(person => person.id === updatedObject.id ? updatedObject : person)))
+        .catch(error =>{
+          setMessage([`Information of ${changedUser.name} has already been removed from server`, 'error']);
+          setTimeout(()=>setMessage([null, null]),5000)
+        });
         setNewName('');
         setNewNumber('');
       }
@@ -38,6 +44,8 @@ const App = () => {
     else{
       //alert(`${newName} is already added to phonebook` );
       personService.create(dataPerson).then(dataObject => setPersons(persons.concat(dataObject)));
+      setMessage([`Added ${dataPerson.name}`, 'addedUser']);
+      setTimeout(()=>setMessage([null, null]),5000)
       setNewName('');
       setNewNumber('');
     }
@@ -47,7 +55,7 @@ const App = () => {
     if (window.confirm(`Do you really want to delete ${persons.find(person => person.id==id).name}?`)) {
       personService.deleteUser(id).then(() => {
         personService.getAll().then(dataObject => setPersons(dataObject.filter(person => person.id !==id)))
-      });
+      })
     }
   }
 
@@ -65,7 +73,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-
+      <Notification message={message[0]} className={message[1]}/>
       <Filter filter={filter} handleFilterChange={handleFilterChange}/>
 
       <h2>Add a new </h2>
