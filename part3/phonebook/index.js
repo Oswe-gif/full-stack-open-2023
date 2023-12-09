@@ -3,10 +3,10 @@ const morgan = require('morgan');
 const cors = require('cors')
 const app = express();
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 morgan.token('body', request =>JSON.stringify(request.body));
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms - :body'));
-
+app.use(express.static('build'));
 persons= [
     { 
       name: "Arto Hellas", 
@@ -28,10 +28,6 @@ persons= [
       number: "39-23-6423122",
       id: 4
     }]
-
-app.get('/', (request, response) => {
-    response.send('<h1>Welcome!</h1>')
-})
 
 app.get('/info', (request, response) => {
     const information={
