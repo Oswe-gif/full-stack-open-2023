@@ -14,12 +14,12 @@ const url =
 
 mongoose.connect(url)
 
-const noteSchema = new mongoose.Schema({
+const personSchema = new mongoose.Schema({
     name: String,
     number: String,
     id: Number,
 })
-const Person = mongoose.model('Person', noteSchema)
+const Person = mongoose.model('Person', personSchema)
 
 if(name === undefined && number === undefined){
     Person.find({}).then(result => {
