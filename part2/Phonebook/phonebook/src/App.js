@@ -29,7 +29,8 @@ const App = () => {
     if(user !== undefined){
       const textWindow = `${dataPerson.name} is already added to phonebook, replace the old number with new one?`;
       if (window.confirm(textWindow)){
-        const changedUser = { ...user, number: dataPerson.number  }
+        const changedUser = { ...user, number: dataPerson.number  };
+        console.log(changedUser.id);
         personService.update(changedUser)
         .then(updatedObject => setPersons(persons.map(person => person.id === updatedObject.id ? updatedObject : person)))
         .catch(error =>{

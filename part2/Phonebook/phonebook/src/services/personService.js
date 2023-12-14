@@ -9,7 +9,7 @@ const create = newObject =>{
 }
 const update = updatedObject =>{
     console.log('new user', updatedObject);
-    return axios.put(`${baseURL}/${updatedObject.id}`,updatedObject).then(response=>response.data);
+    return axios.put(`${baseURL}`,updatedObject).then(response=>response.data);
 }
 const deleteUser = id =>{
     return axios.delete(`${baseURL}/${id}`);
