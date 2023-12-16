@@ -33,10 +33,15 @@ const App = () => {
         console.log(changedUser.id);
         personService.update(changedUser)
         .then(updatedObject => setPersons(persons.map(person => person.id === updatedObject.id ? updatedObject : person)))
+        .then(()=>setMessage(['The user was updated!', 'addedUser']))
         .catch(error =>{
-          setMessage([`Information of ${changedUser.name} has already been removed from server`, 'error']);
-          setTimeout(()=>setMessage([null, null]),5000)
+          if(error.response.data.name==='ValidationError'){
+            setMessage([error.response.data.error, 'error'])
+          }else{
+            setMessage([`Information of ${changedUser.name} has already been removed from server`, 'error']);
+          }
         });
+        setTimeout(()=>setMessage([null, null]),5000)
         setNewName('');
         setNewNumber('');
       }
@@ -44,8 +49,14 @@ const App = () => {
     }
     else{
       //alert(`${newName} is already added to phonebook` );
-      personService.create(dataPerson).then(dataObject => setPersons(persons.concat(dataObject)));
-      setMessage([`Added ${dataPerson.name}`, 'addedUser']);
+      personService.create(dataPerson)
+      .then(dataObject => {
+        setPersons(persons.concat(dataObject));
+        console.log('entraaaa')
+        setMessage([`Added ${dataPerson.name}`, 'addedUser']);
+      })
+      .catch(error => setMessage([error.response.data.error, 'error']))
+      
       setTimeout(()=>setMessage([null, null]),5000)
       setNewName('');
       setNewNumber('');
@@ -53,7 +64,7 @@ const App = () => {
   }
   const deleteUser=(event)=>{
     const id=event.target.value;
-    if (window.confirm(`Do you really want to delete ${persons.find(person => person.id==id).name}?`)) {
+    if (window.confirm(`Do you really want to delete ${persons.find(person => person.id===id).name}?`)) {
       personService.deleteUser(id).then(() => {
         personService.getAll().then(dataObject => setPersons(dataObject.filter(person => person.id !==id)))
       })
