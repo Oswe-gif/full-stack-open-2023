@@ -1,5 +1,6 @@
 const config = require('./utils/config')
 const express = require('express')
+require('express-async-errors')//para no usar try-catch
 const app = express()
 const blogsRouter = require('./controllers/blogs')
 const middleware = require('./utils/middleware')
@@ -18,6 +19,6 @@ mongoose.connect(config.MONGODB_URI)
 
 app.use(express.json())
 app.use('/api/blogs', blogsRouter)
-app.use(middleware)
-
+app.use(middleware.unknownEndpoint)
+app.use(middleware.errorHandler)
 module.exports = app
