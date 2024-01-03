@@ -123,6 +123,46 @@ describe('bad request: properties are missing', () => {
     
 })
 
+describe('deletion of a blog', () => {
+  test('succeeds with status code 204 if id is valid', async () => {
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToDelete = blogsAtStart[0]
+
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd).toHaveLength(
+      helper.initialBlogs.length - 1
+    )
+
+    const title = blogsAtEnd.map(r => r.title)
+
+    expect(title).not.toContain(blogToDelete.title)
+  })
+})
+
+describe('update a blog',()=>{
+  test('succeeds and returns a json of the updated blog', async()=>{
+    const blogwithNewData = {
+      title: 'Updated',
+      author: 'Updated',
+      likes: -1
+  }
+    const blogsAtStart = await helper.blogsInDb()
+    const blogToUpdate = blogsAtStart[0]
+    await api
+    .put(`/api/blogs/${blogToUpdate.id}`)
+    .send(blogwithNewData)
+    .expect(200)
+    .expect('Content-Type', /application\/json/)
+
+    const newUpdatedBlog = await helper.findABlogInDb('Updated')
+    expect(newUpdatedBlog.title).toEqual(blogwithNewData.title)
+  })
+})
 afterAll(() => {
     mongoose.connection.close()
 })
